@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '../../store'
 import { handleStatus, Order } from '../../store/reducers/orderPanel'
 import { useEffect, useState } from 'react'
+import ImagesProducts from '../ImagesProducts'
 
 const OrderPanel = () => {
   const { items } = useSelector((state: RootReducer) => state.orderPanel)

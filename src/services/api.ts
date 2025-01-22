@@ -1,5 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Product, ProductPayload } from '../types'
+import { ImageProduct, Product, ProductPayload } from '../types'
+
+interface UploadMetadata {
+  [data: string]: string
+}
+
+interface UploadRequest {
+  file: File
+  data: string
+}
 
 const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -33,6 +42,19 @@ const api = createApi({
         method: 'DELETE'
       }),
       invalidatesTags: ['produtos']
+    }),
+    uploadImageProduto: builder.mutation<string, UploadRequest>({
+      query: ({ file, data }: { file: File; data: string }) => {
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('name', data) // Envia o JSON como string
+
+        return {
+          url: '/products/images',
+          method: 'POST',
+          body: formData
+        }
+      }
     })
   })
 })
@@ -41,6 +63,7 @@ export const {
   useGetAllProdutosQuery,
   useCreateProductMutation,
   useUpdateProductMutation,
-  useDeleteProductMutation
+  useDeleteProductMutation,
+  useUploadImageProdutoMutation
 } = api
 export default api

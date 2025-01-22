@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import orderPanelReducer from './reducers/orderPanel'
 import productPanelReducer from './reducers/productPanel'
 import pesquisaProdutoReducer from './reducers/pesquisaProduto'
+import imagePanelReducer from './reducers/imagePanel'
 import api from '../services/api'
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
     orderPanel: orderPanelReducer,
     productPanel: productPanelReducer,
     pesquisaProduto: pesquisaProdutoReducer,
+    imagePanel: imagePanelReducer,
     [api.reducerPath]: api.reducer
   },
   middleware: (getDefaultMiddleware) =>

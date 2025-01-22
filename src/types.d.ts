@@ -18,3 +18,9 @@ declare type ProductPayload = {
   img: string
   category: Category
 }
+
+declare type ImageProduct = {
+  url: string
+  file?: File
+  name?: string
+}

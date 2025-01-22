@@ -18,6 +18,8 @@ import {
   useGetAllProdutosQuery,
   useUpdateProductMutation
 } from '../../services/api'
+import ModalContainer from '../Modal'
+import ImagesProducts from '../ImagesProducts'
 
 interface ModalState extends Product {
   isVisible: boolean
@@ -45,7 +47,8 @@ const ProductPanel = () => {
   const { items } = useSelector((state: RootReducer) => state.productPanel)
   const { termo } = useSelector((state: RootReducer) => state.pesquisaProduto)
   const dispatch = useDispatch()
-  const [modal, setModal] = useState<ModalState>({
+  const [modalImageProduto, setModalImageProduto] = useState(false)
+  const [modalProduto, setModalProduto] = useState<ModalState>({
     id: 0,
     name: '',
     description: '',
@@ -76,7 +79,7 @@ const ProductPanel = () => {
           price: dataCreate.price
         })
       )
-      closeModal()
+      closeModalProduto()
     }
   }, [isSuccessCreate])
 
@@ -93,7 +96,7 @@ const ProductPanel = () => {
           price: dataUpdate.price
         })
       )
-      closeModal()
+      closeModalProduto()
     }
   }, [isSuccessUpdate])
 
@@ -112,31 +115,31 @@ const ProductPanel = () => {
     },
     validationSchema: Yup.object({}),
     onSubmit: (values) => {
-      if (modal.type === 'create') {
+      if (modalProduto.type === 'create') {
         cadastrarProduto({
           name: values.name.trim(),
           description: values.description.trim(),
           img: '',
           category: values.category,
           price: values.price,
-          isInMenu: modal.isInMenu
+          isInMenu: modalProduto.isInMenu
         })
       } else {
         atualizarProduto({
-          id: modal.id,
+          id: modalProduto.id,
           name: values.name,
           category: values.category,
           description: values.description,
-          img: modal.img,
-          isInMenu: modal.isInMenu,
+          img: modalProduto.img,
+          isInMenu: modalProduto.isInMenu,
           price: values.price
         })
       }
     }
   })
 
-  const closeModal = () => {
-    setModal({
+  const closeModalProduto = () => {
+    setModalProduto({
       id: 0,
       name: '',
       description: '',
@@ -149,7 +152,7 @@ const ProductPanel = () => {
     })
   }
 
-  const openModal = (
+  const openModalProduto = (
     id: number,
     img: string,
     isInMenu: boolean,
@@ -159,7 +162,7 @@ const ProductPanel = () => {
     category: Category,
     type: 'updade' | 'create'
   ) => {
-    setModal({
+    setModalProduto({
       id: id,
       img: img,
       description: description,
@@ -203,6 +206,7 @@ const ProductPanel = () => {
       const previewURL = URL.createObjectURL(file) // Gera uma URL temporária para pré-visualizar
       setPreview(previewURL)
     }
+    console.log(event.target.value.split('\\').pop())
   }
 
   const renderizaProdutos = (): JSX.Element => {
@@ -228,7 +232,7 @@ const ProductPanel = () => {
               price={item.price}
               category={item.category}
               onClick={() =>
-                openModal(
+                openModalProduto(
                   item.id,
                   item.img,
                   item.isInMenu,
@@ -248,10 +252,10 @@ const ProductPanel = () => {
     }
   }
 
-  const renderizaModal = (): JSX.Element => {
+  const renderizaModalProduto = (): JSX.Element => {
     return (
-      <S.Modal className={modal.isVisible ? 'visible' : ''}>
-        <S.ModalContent onSubmit={form.handleSubmit}>
+      <ModalContainer isVisible={modalProduto.isVisible}>
+        <S.Form onSubmit={form.handleSubmit}>
           {isLoadingCreate || isLoadingUpdate ? (
             <>Carregando</>
           ) : (
@@ -266,11 +270,12 @@ const ProductPanel = () => {
               )}
               <S.LabelInput>
                 <label htmlFor="">Imagem do Produto:</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                />
+                <button
+                  type="button"
+                  onClick={() => setModalImageProduto(true)}
+                >
+                  Alterar Imagem
+                </button>
               </S.LabelInput>
               <S.LabelInput>
                 <label htmlFor="name">Nome do Produto:</label>
@@ -314,7 +319,7 @@ const ProductPanel = () => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => closeModal()}
+                  onClick={() => closeModalProduto()}
                   className="btn-cancelar"
                 >
                   Cancelar
@@ -322,9 +327,8 @@ const ProductPanel = () => {
               </S.LabelInput>
             </>
           )}
-        </S.ModalContent>
-        <div className="overlay"></div>
-      </S.Modal>
+        </S.Form>
+      </ModalContainer>
     )
   }
 
@@ -334,7 +338,16 @@ const ProductPanel = () => {
         <PesquisaProdutos />
         <button
           onClick={() => {
-            openModal(0, '', false, '', '', 0, Category.MARMITA, 'create')
+            openModalProduto(
+              0,
+              '',
+              false,
+              '',
+              '',
+              0,
+              Category.MARMITA,
+              'create'
+            )
           }}
         >
           adicionar produto
@@ -342,7 +355,12 @@ const ProductPanel = () => {
       </S.TopBarDiv>
       <S.ProductPanelContainer>
         {renderizaProdutos()}
-        {renderizaModal()}
+        {renderizaModalProduto()}
+        <ImagesProducts
+          onClickCancelar={() => setModalImageProduto(false)}
+          isDisable={false}
+          isVisible={modalImageProduto}
+        />
       </S.ProductPanelContainer>
     </S.Div>
   )
