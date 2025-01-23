@@ -8,37 +8,7 @@ type ProductPanelState = {
 }
 
 const initialState: ProductPanelState = {
-  items: [
-    {
-      id: 1,
-      name: 'Marmita',
-      description:
-        'Arroz, feijão, farofa, macarrão, maionese, 2 tipos de carne a escolha. +CARNE',
-      img: marmita,
-      isInMenu: true,
-      price: 20,
-      category: Category.MARMITA
-    },
-    {
-      id: 2,
-      name: 'Marmita',
-      description:
-        'Arroz, feijão, farofa, macarrão, maionese, 2 tipos de carne a escolha. +CARNE',
-      img: marmita,
-      isInMenu: true,
-      price: 20,
-      category: Category.MARMITA
-    },
-    {
-      id: 3,
-      name: 'Coca Cola Lata',
-      description: 'Coca Lata',
-      img: marmita,
-      isInMenu: true,
-      price: 20,
-      category: Category.BEBIDA
-    }
-  ]
+  items: []
 }
 
 const productPanelSlice = createSlice({
@@ -53,7 +23,7 @@ const productPanelSlice = createSlice({
           id: item.id,
           category: item.category,
           description: item.description,
-          img: item.img,
+          image: item.image,
           isInMenu: item.isInMenu,
           name: item.name,
           price: item.price
@@ -77,17 +47,33 @@ const productPanelSlice = createSlice({
         id: action.payload.id,
         category: action.payload.category,
         description: action.payload.description,
-        img: action.payload.img,
+        image: action.payload.image,
         isInMenu: action.payload.isInMenu,
         name: action.payload.name,
         price: action.payload.price
       }
 
       state.items.push(produto)
+    },
+    alteraImageDefaultProduto: (state, action: PayloadAction<number>) => {
+      state.items.forEach((item) => {
+        if (item.image.id === action.payload) {
+          item.image = {
+            id: -1,
+            name: '',
+            url: 'https://resriobranco-images.s3.sa-east-1.amazonaws.com/item_no_image/item_no_image.png'
+          }
+        }
+      })
     }
   }
 })
 
-export const { buscarProdutos, create, update, excluir } =
-  productPanelSlice.actions
+export const {
+  buscarProdutos,
+  create,
+  update,
+  excluir,
+  alteraImageDefaultProduto
+} = productPanelSlice.actions
 export default productPanelSlice.reducer

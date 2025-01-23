@@ -6,7 +6,7 @@ declare type Product = {
   description: string
   price: number
   isInMenu: boolean
-  img: string
+  image: ImageProductDB
   category: Category
 }
 
@@ -15,7 +15,7 @@ declare type ProductPayload = {
   description: string
   price: number
   isInMenu: boolean
-  img: string
+  image: ImageProductDB
   category: Category
 }
 
@@ -23,4 +23,10 @@ declare type ImageProduct = {
   url: string
   file?: File
   name?: string
+}
+
+declare type ImageProductDB = {
+  id: number
+  name: string
+  url: string
 }

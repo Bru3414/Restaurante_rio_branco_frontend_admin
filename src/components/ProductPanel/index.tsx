@@ -10,7 +10,7 @@ import {
   create,
   update
 } from '../../store/reducers/productPanel'
-import { Product } from '../../types'
+import { ImageProductDB, Product } from '../../types'
 import { Category } from '../../utils/enums/Product'
 import PesquisaProdutos from '../PesquisaProdutos'
 import {
@@ -20,6 +20,8 @@ import {
 } from '../../services/api'
 import ModalContainer from '../Modal'
 import ImagesProducts from '../ImagesProducts'
+import { handleImageSelected } from '../../store/reducers/imagePanel'
+import Button from '../Button'
 
 interface ModalState extends Product {
   isVisible: boolean
@@ -42,10 +44,12 @@ const ProductPanel = () => {
       isError: isErrorUpdate
     }
   ] = useUpdateProductMutation()
-  const [image, setImage] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
   const { items } = useSelector((state: RootReducer) => state.productPanel)
   const { termo } = useSelector((state: RootReducer) => state.pesquisaProduto)
+  const { image, imageSelected } = useSelector(
+    (state: RootReducer) => state.imagePanel
+  )
   const dispatch = useDispatch()
   const [modalImageProduto, setModalImageProduto] = useState(false)
   const [modalProduto, setModalProduto] = useState<ModalState>({
@@ -54,7 +58,11 @@ const ProductPanel = () => {
     description: '',
     price: 0,
     isInMenu: false,
-    img: '',
+    image: {
+      id: -1,
+      name: '',
+      url: ''
+    },
     isVisible: false,
     category: Category.MARMITA,
     type: 'create'
@@ -73,7 +81,7 @@ const ProductPanel = () => {
           id: dataCreate.id,
           category: dataCreate.category,
           description: dataCreate.description,
-          img: dataCreate.img,
+          image: dataCreate.image,
           isInMenu: dataCreate.isInMenu,
           name: dataCreate.name,
           price: dataCreate.price
@@ -90,7 +98,7 @@ const ProductPanel = () => {
           id: dataUpdate.id,
           category: dataUpdate.category,
           description: dataUpdate.description,
-          img: dataUpdate.img,
+          image: dataUpdate.image,
           isInMenu: dataUpdate.isInMenu,
           name: dataUpdate.name,
           price: dataUpdate.price
@@ -117,9 +125,9 @@ const ProductPanel = () => {
     onSubmit: (values) => {
       if (modalProduto.type === 'create') {
         cadastrarProduto({
-          name: values.name.trim(),
-          description: values.description.trim(),
-          img: '',
+          name: values.name.toLowerCase().trim(),
+          description: values.description.toLowerCase().trim(),
+          image: modalProduto.image,
           category: values.category,
           price: values.price,
           isInMenu: modalProduto.isInMenu
@@ -127,10 +135,10 @@ const ProductPanel = () => {
       } else {
         atualizarProduto({
           id: modalProduto.id,
-          name: values.name,
+          name: values.name.toLowerCase().trim(),
           category: values.category,
-          description: values.description,
-          img: modalProduto.img,
+          description: values.description.toLowerCase().trim(),
+          image: modalProduto.image,
           isInMenu: modalProduto.isInMenu,
           price: values.price
         })
@@ -145,7 +153,7 @@ const ProductPanel = () => {
       description: '',
       price: 0,
       isInMenu: false,
-      img: '',
+      image: imageSelected,
       isVisible: false,
       category: Category.MARMITA,
       type: 'create'
@@ -154,7 +162,7 @@ const ProductPanel = () => {
 
   const openModalProduto = (
     id: number,
-    img: string,
+    image: ImageProductDB,
     isInMenu: boolean,
     name: string,
     description: string,
@@ -164,7 +172,7 @@ const ProductPanel = () => {
   ) => {
     setModalProduto({
       id: id,
-      img: img,
+      image: image,
       description: description,
       isInMenu: isInMenu,
       name: name,
@@ -177,7 +185,6 @@ const ProductPanel = () => {
     form.values.description = description
     form.values.price = price
     form.values.category = category
-    setPreview(img)
   }
 
   const optionsSelect = (): JSX.Element => {
@@ -199,24 +206,16 @@ const ProductPanel = () => {
     )
   }
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      setImage(file) // Armazena o arquivo no estado
-      const previewURL = URL.createObjectURL(file) // Gera uma URL temporária para pré-visualizar
-      setPreview(previewURL)
-    }
-    console.log(event.target.value.split('\\').pop())
-  }
-
   const renderizaProdutos = (): JSX.Element => {
     if (!produtosBD) {
       return <>Carregando...</>
     }
 
-    const produtos = items.filter(
+    let produtos = items.filter(
       (item) => item.name.toLowerCase().search(termo.toLowerCase()) >= 0
     )
+
+    produtos = produtos.sort((a, b) => a.id - b.id)
 
     if (produtos.length >= 1) {
       return (
@@ -227,14 +226,21 @@ const ProductPanel = () => {
               id={item.id}
               name={item.name}
               description={item.description}
-              img={item.img}
+              image={item.image}
               isInMenu={item.isInMenu}
               price={item.price}
               category={item.category}
-              onClick={() =>
+              onClick={() => {
+                dispatch(
+                  handleImageSelected({
+                    id: item.image.id,
+                    name: item.image.name,
+                    url: item.image.url
+                  })
+                )
                 openModalProduto(
                   item.id,
-                  item.img,
+                  item.image,
                   item.isInMenu,
                   item.name,
                   item.description,
@@ -242,7 +248,7 @@ const ProductPanel = () => {
                   item.category,
                   'updade'
                 )
-              }
+              }}
             />
           ))}
         </>
@@ -260,22 +266,34 @@ const ProductPanel = () => {
             <>Carregando</>
           ) : (
             <>
-              {preview ? (
-                <S.ImgDiv>
-                  <h3>Pré-visualização:</h3>
-                  <img src={preview} alt="Preview" />
-                </S.ImgDiv>
-              ) : (
-                <div></div>
-              )}
+              <S.ImgDiv>
+                <h3>Imagem:</h3>
+                <img
+                  src={
+                    modalProduto.image.id === -1
+                      ? 'https://resriobranco-images.s3.sa-east-1.amazonaws.com/item_no_image/item_no_image.png'
+                      : modalProduto.image.url
+                  }
+                  alt={modalProduto.image.name}
+                />
+              </S.ImgDiv>
               <S.LabelInput>
                 <label htmlFor="">Imagem do Produto:</label>
-                <button
+                <S.ButtonImage
                   type="button"
-                  onClick={() => setModalImageProduto(true)}
+                  onClick={() => {
+                    dispatch(
+                      handleImageSelected({
+                        id: modalProduto.image.id,
+                        name: modalProduto.image.name,
+                        url: modalProduto.image.url
+                      })
+                    )
+                    setModalImageProduto(true)
+                  }}
                 >
                   Alterar Imagem
-                </button>
+                </S.ButtonImage>
               </S.LabelInput>
               <S.LabelInput>
                 <label htmlFor="name">Nome do Produto:</label>
@@ -314,16 +332,19 @@ const ProductPanel = () => {
                 {optionsSelect()}
               </S.LabelInput>
               <S.LabelInput>
-                <button type="submit" className="btn-salvar">
-                  Salvar
-                </button>
-                <button
+                <Button
+                  type="submit"
+                  text="Salvar"
+                  variant="CONFIRM"
+                  disable={isLoadingCreate || isLoadingUpdate}
+                />
+                <Button
+                  text="Cancelar"
+                  variant="CANCEL"
+                  disable={isLoadingCreate || isLoadingUpdate}
                   type="button"
                   onClick={() => closeModalProduto()}
-                  className="btn-cancelar"
-                >
-                  Cancelar
-                </button>
+                />
               </S.LabelInput>
             </>
           )}
@@ -338,9 +359,20 @@ const ProductPanel = () => {
         <PesquisaProdutos />
         <button
           onClick={() => {
+            dispatch(
+              handleImageSelected({
+                id: -1,
+                name: '',
+                url: ''
+              })
+            )
             openModalProduto(
               0,
-              '',
+              {
+                id: -1,
+                name: '',
+                url: ''
+              },
               false,
               '',
               '',
@@ -357,9 +389,24 @@ const ProductPanel = () => {
         {renderizaProdutos()}
         {renderizaModalProduto()}
         <ImagesProducts
-          onClickCancelar={() => setModalImageProduto(false)}
-          isDisable={false}
+          onClickCancelar={() => {
+            setModalImageProduto(false)
+          }}
           isVisible={modalImageProduto}
+          onClickConfirmar={() => {
+            setModalProduto({
+              category: modalProduto.category,
+              description: modalProduto.description,
+              id: modalProduto.id,
+              image: imageSelected,
+              isInMenu: modalProduto.isInMenu,
+              isVisible: modalProduto.isVisible,
+              name: modalProduto.name,
+              price: modalProduto.price,
+              type: modalProduto.type
+            })
+            setModalImageProduto(false)
+          }}
         />
       </S.ProductPanelContainer>
     </S.Div>

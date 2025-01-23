@@ -27,6 +27,7 @@ const Modal = styled.div`
 `
 export const ModalContent = styled.div`
   max-width: 960px;
+  min-width: 700px;
   position: relative;
   z-index: 1;
   background-color: #fff;

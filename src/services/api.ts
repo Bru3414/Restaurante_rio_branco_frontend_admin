@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { ImageProduct, Product, ProductPayload } from '../types'
+import { ImageProduct, ImageProductDB, Product, ProductPayload } from '../types'
 
 interface UploadMetadata {
   [data: string]: string
@@ -14,7 +14,7 @@ const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:8080'
   }),
-  tagTypes: ['produtos'],
+  tagTypes: ['produtos', 'produtos/images'],
   endpoints: (builder) => ({
     getAllProdutos: builder.query<Product[], void>({
       query: () => '/products',
@@ -43,18 +43,29 @@ const api = createApi({
       }),
       invalidatesTags: ['produtos']
     }),
-    uploadImageProduto: builder.mutation<string, UploadRequest>({
+    uploadImageProduto: builder.mutation<ImageProductDB, UploadRequest>({
       query: ({ file, data }: { file: File; data: string }) => {
         const formData = new FormData()
         formData.append('file', file)
-        formData.append('name', data) // Envia o JSON como string
+        formData.append('name', data)
 
         return {
           url: '/products/images',
           method: 'POST',
           body: formData
         }
-      }
+      },
+      invalidatesTags: ['produtos/images']
+    }),
+    getAllImagesProducts: builder.query<ImageProductDB[], void>({
+      query: () => '/products/images',
+      providesTags: ['produtos/images']
+    }),
+    deleteImageProduct: builder.mutation<void, number>({
+      query: (id) => ({
+        url: `/products/images/${id}`,
+        method: 'DELETE'
+      })
     })
   })
 })
@@ -64,6 +75,8 @@ export const {
   useCreateProductMutation,
   useUpdateProductMutation,
   useDeleteProductMutation,
-  useUploadImageProdutoMutation
+  useUploadImageProdutoMutation,
+  useGetAllImagesProductsQuery,
+  useDeleteImageProductMutation
 } = api
 export default api

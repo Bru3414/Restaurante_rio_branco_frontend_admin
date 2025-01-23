@@ -39,9 +39,11 @@ export const ImgDiv = styled.div`
   align-items: center;
 
   img {
+    width: 150px;
     height: 150px;
     padding: 8px;
     border: 1px solid #000;
+    object-fit: cover;
   }
 `
 
@@ -84,28 +86,15 @@ export const LabelInput = styled.div`
     font-size: 20px;
     resize: none;
   }
+`
+export const ButtonImage = styled.button`
+  padding: 8px;
+  font-size: 20px;
+  border: 1px solid #000;
+  outline: none;
+  cursor: pointer;
 
-  button {
-    padding: 8px;
-    font-size: 20px;
-    border: 1px solid #000;
-    outline: none;
-    cursor: pointer;
-
-    &.btn-cancelar {
-      background-color: rgb(216, 69, 69);
-
-      &:hover {
-        background-color: rgb(192, 12, 12);
-      }
-    }
-
-    &.btn-salvar {
-      background-color: #a7e09c;
-
-      &:hover {
-        background-color: #31dd57;
-      }
-    }
+  &:hover {
+    background-color: gray;
   }
 `

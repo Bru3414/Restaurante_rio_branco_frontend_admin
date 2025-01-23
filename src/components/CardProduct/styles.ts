@@ -1,5 +1,9 @@
 import styled from 'styled-components'
 
+type Props = {
+  isinmenu: boolean
+}
+
 export const CardContainer = styled.div`
   position: relative;
   display: flex;
@@ -56,52 +60,29 @@ export const CardHeader = styled.div`
   column-gap: 16px;
   border-bottom: 1px solid #000;
   img {
+    width: 100px;
     height: 100px;
     padding: 8px;
+    object-fit: cover;
   }
 `
-export const ButtonMenu = styled.button`
+export const ButtonMenu = styled.button<Props>`
   padding: 8px;
   outline: none;
   border: none;
   cursor: pointer;
-  background-color: rgb(231, 229, 110);
+  background-color: ${(props) =>
+    props.isinmenu ? 'rgb(231, 229, 110)' : 'rgb(158, 158, 134)'};
   font-size: 20px;
   text-transform: uppercase;
 
   &:hover {
-    background-color: rgb(203, 230, 56);
+    background-color: ${(props) =>
+      props.isinmenu ? 'rgb(203, 230, 56)' : 'rgb(87, 87, 79)'};
   }
 `
 export const ButtonDiv = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 16px;
-`
-
-export const ButtonSaveEdit = styled.button`
-  padding: 8px;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  background-color: #a7e09c;
-  font-size: 20px;
-  text-transform: uppercase;
-
-  &:hover {
-    background-color: #31dd57;
-  }
-`
-export const ButtonCancelarExcluir = styled.button`
-  padding: 8px;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  background-color: rgb(216, 69, 69);
-  font-size: 20px;
-  text-transform: uppercase;
-
-  &:hover {
-    background-color: rgb(192, 12, 12);
-  }
 `
