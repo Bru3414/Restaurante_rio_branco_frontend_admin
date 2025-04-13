@@ -18,17 +18,7 @@ const productPanelSlice = createSlice({
     buscarProdutos: (state, action: PayloadAction<Product[]>) => {
       state.items = []
 
-      action.payload.forEach((item) => {
-        state.items.push({
-          id: item.id,
-          category: item.category,
-          description: item.description,
-          image: item.image,
-          isInMenu: item.isInMenu,
-          name: item.name,
-          price: item.price
-        })
-      })
+      action.payload.forEach((item) => state.items.push(item))
     },
     update: (state, action: PayloadAction<Product>) => {
       const index = state.items.findIndex(

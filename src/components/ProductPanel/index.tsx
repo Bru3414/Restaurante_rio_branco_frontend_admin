@@ -47,6 +47,9 @@ const ProductPanel = () => {
   const [preview, setPreview] = useState<string | null>(null)
   const { items } = useSelector((state: RootReducer) => state.productPanel)
   const { termo } = useSelector((state: RootReducer) => state.pesquisaProduto)
+  const { items: images } = useSelector(
+    (state: RootReducer) => state.imagePanel
+  )
   const { image, imageSelected } = useSelector(
     (state: RootReducer) => state.imagePanel
   )
@@ -390,6 +393,19 @@ const ProductPanel = () => {
         {renderizaModalProduto()}
         <ImagesProducts
           onClickCancelar={() => {
+            if (!images.some((item) => item.id === modalProduto.image.id)) {
+              setModalProduto({
+                category: modalProduto.category,
+                description: modalProduto.description,
+                id: modalProduto.id,
+                image: imageSelected,
+                isInMenu: modalProduto.isInMenu,
+                isVisible: modalProduto.isVisible,
+                name: modalProduto.name,
+                price: modalProduto.price,
+                type: modalProduto.type
+              })
+            }
             setModalImageProduto(false)
           }}
           isVisible={modalImageProduto}

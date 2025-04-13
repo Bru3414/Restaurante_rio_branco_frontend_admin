@@ -12,7 +12,15 @@ interface UploadRequest {
 
 const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8080'
+    baseUrl: 'http://localhost:8080',
+    prepareHeaders: (headers) => {
+      headers.set(
+        'Authorization',
+        `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnVubzM0MTQuZGFtYnJvc2tpQGdtYWlsLmNvbSIsImlhdCI6MTc0Mzk1MjU1MSwiZXhwIjoxNzQ0NTU3MzUxfQ.8Es-tiM4mHAp-QIgXcFSktxiemA9yrOb-u-P0neQa5S8Hyg1wRywfLZRwf317YBtfCrWyvK0C_o9AzPRqzhcKQ`
+      )
+
+      return headers
+    }
   }),
   tagTypes: ['produtos', 'produtos/images'],
   endpoints: (builder) => ({

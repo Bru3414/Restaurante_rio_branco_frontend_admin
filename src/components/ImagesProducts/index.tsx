@@ -26,6 +26,7 @@ import {
   buscarProdutos
 } from '../../store/reducers/productPanel'
 import Button from '../Button'
+import lixeira from '../../assets/images/lixeira.png'
 
 interface ModalState extends ImageProductDB {
   isVisible: boolean
@@ -109,6 +110,13 @@ const ImagesProducts = ({
           name: ''
         })
       )
+      dispatch(
+        handleImageSelected({
+          id: dataUpload.id,
+          name: dataUpload.name,
+          url: dataUpload.url
+        })
+      )
     }
   }, [isSuccessUpload])
 
@@ -188,7 +196,7 @@ const ImagesProducts = ({
         <S.ContainerImage>
           {filterItems.map((item) => (
             <S.DivImage key={item.id}>
-              <img
+              <S.Image
                 id={item.id.toString()}
                 src={item.url}
                 alt={item.name}
@@ -207,7 +215,7 @@ const ImagesProducts = ({
                   })
                 }
               >
-                X
+                <img src={lixeira} alt="lixeira icon" />
               </span>
             </S.DivImage>
           ))}
