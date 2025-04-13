@@ -1,5 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { ImageProduct, ImageProductDB, Product, ProductPayload } from '../types'
+import {
+  ImageProduct,
+  ImageProductDB,
+  Order,
+  Product,
+  ProductPayload
+} from '../types'
 
 interface UploadMetadata {
   [data: string]: string
@@ -14,9 +20,11 @@ const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:8080',
     prepareHeaders: (headers) => {
+      // Esta assim apenas para desenvolvimento
+      // Quando eu trabalhar na parte de adiministradores, isso sera ajustado
       headers.set(
         'Authorization',
-        `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnVubzM0MTQuZGFtYnJvc2tpQGdtYWlsLmNvbSIsImlhdCI6MTc0Mzk1MjU1MSwiZXhwIjoxNzQ0NTU3MzUxfQ.8Es-tiM4mHAp-QIgXcFSktxiemA9yrOb-u-P0neQa5S8Hyg1wRywfLZRwf317YBtfCrWyvK0C_o9AzPRqzhcKQ`
+        `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnVubzM0MTQuZGFtYnJvc2tpQGdtYWlsLmNvbSIsImlhdCI6MTc0NDQ4NDA0OSwiZXhwIjoxNzQ1MDg4ODQ5fQ.578onyxPfo9vkjFHshhEJRfSPDU9I8p3WZLfRraPHzcuaTzlXAh2au1Ly2Bi7lbH2jmR2D8mq-jmh9AxkBbLsw`
       )
 
       return headers
@@ -74,6 +82,16 @@ const api = createApi({
         url: `/products/images/${id}`,
         method: 'DELETE'
       })
+    }),
+    getOrdersForOrdersPanelApi: builder.query<Order[], void>({
+      query: () => '/order/get-orders-for-orders-panel'
+    }),
+    handleOrderStatus: builder.mutation<void, Order>({
+      query: (body) => ({
+        url: '/order/handle-order-status',
+        method: 'PUT',
+        body
+      })
     })
   })
 })
@@ -85,6 +103,8 @@ export const {
   useDeleteProductMutation,
   useUploadImageProdutoMutation,
   useGetAllImagesProductsQuery,
-  useDeleteImageProductMutation
+  useDeleteImageProductMutation,
+  useGetOrdersForOrdersPanelApiQuery,
+  useHandleOrderStatusMutation
 } = api
 export default api

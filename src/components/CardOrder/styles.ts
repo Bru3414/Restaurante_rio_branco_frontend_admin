@@ -1,5 +1,14 @@
 import styled from 'styled-components'
 
+type Props = {
+  colorButton:
+    | 'AGUARDANDO_APROVACAO'
+    | 'PRODUCAO'
+    | 'PRONTO'
+    | 'FINALIZADO'
+    | 'CANCELADO'
+}
+
 export const CardContainer = styled.div`
   position: relative;
   display: flex;
@@ -44,11 +53,34 @@ export const SpanTimeBairro = styled.span`
   font-size: 18px;
   padding: 0 4px;
 `
-export const Button = styled.button`
+export const Button = styled.button<Props>`
   outline: none;
   border: none;
   padding: 8px;
-  margin-top: 8px;
+  margin: 8px 0;
   cursor: pointer;
   font-size: 24px;
+  background-color: ${(props) => {
+    switch (props.colorButton) {
+      case 'AGUARDANDO_APROVACAO':
+        return '#ffeaa7'
+      case 'PRODUCAO':
+        return '#00cec9'
+      case 'PRONTO':
+        return '#74b9ff'
+      default:
+        return 'gray'
+    }
+  }};
+`
+
+export const TotalValueDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+export const Dotted = styled.span`
+  display: flex;
+  width: 100%;
+  border-top: 3px dotted black;
+  margin: 8px 0 4px;
 `

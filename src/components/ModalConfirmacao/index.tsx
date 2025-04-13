@@ -1,5 +1,5 @@
 import Button from '../Button'
-import ModalContainer from '../Modal'
+import ModalContainer from '../ModalContainer'
 
 import * as S from './styles'
 

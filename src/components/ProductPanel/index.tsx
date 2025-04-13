@@ -18,7 +18,7 @@ import {
   useGetAllProdutosQuery,
   useUpdateProductMutation
 } from '../../services/api'
-import ModalContainer from '../Modal'
+import ModalContainer from '../ModalContainer'
 import ImagesProducts from '../ImagesProducts'
 import { handleImageSelected } from '../../store/reducers/imagePanel'
 import Button from '../Button'

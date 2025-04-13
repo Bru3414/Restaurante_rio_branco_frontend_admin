@@ -2,9 +2,11 @@ import * as S from './styles'
 import CardOrder from '../CardOrder'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '../../store'
-import { handleStatus, Order } from '../../store/reducers/orderPanel'
+import { atualizaOrders } from '../../store/reducers/orderPanel'
 import { useEffect, useState } from 'react'
 import useWebSocket from '../../services/webSocket'
+import { useGetOrdersForOrdersPanelApiQuery } from '../../services/api'
+import { Order } from '../../types'
 
 const OrderPanel = () => {
   const { items } = useSelector((state: RootReducer) => state.orderPanel)
@@ -18,15 +20,23 @@ const OrderPanel = () => {
   }, [items])
 
   const orderList = () => {
-    setAprovarList(items.filter((item) => item.status === 'APROVAR'))
+    setAprovarList(
+      items
+        .filter((item) => item.status === 'AGUARDANDO_APROVACAO')
+        .sort((b, a) => a.nOrder - b.nOrder)
+    )
 
-    setConcluirList(items.filter((item) => item.status === 'CONCLUIR'))
+    setConcluirList(
+      items
+        .filter((item) => item.status === 'PRODUCAO')
+        .sort((b, a) => a.nOrder - b.nOrder)
+    )
 
-    setFinalizarList(items.filter((item) => item.status === 'FINALIZAR'))
-  }
-
-  const changeStatus = (id: number) => {
-    dispatch(handleStatus(id))
+    setFinalizarList(
+      items
+        .filter((item) => item.status === 'PRONTO')
+        .sort((b, a) => a.nOrder - b.nOrder)
+    )
   }
 
   const renderizaPedidos = (
@@ -37,17 +47,7 @@ const OrderPanel = () => {
       <S.OrderDiv>
         <h1>{title}</h1>
         {list ? (
-          list.map((item) => (
-            <CardOrder
-              key={item.nPedido}
-              nPedido={item.nPedido}
-              name={item.name}
-              bairro={item.bairro}
-              time={item.time}
-              type={item.status}
-              onClick={() => changeStatus(item.nPedido)}
-            />
-          ))
+          list.map((item) => <CardOrder key={item.id} order={item} />)
         ) : (
           <div></div>
         )}

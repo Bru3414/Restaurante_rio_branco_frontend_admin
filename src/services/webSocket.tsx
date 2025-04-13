@@ -4,14 +4,14 @@ import { Client, IMessage } from '@stomp/stompjs'
 
 type UseWebSocketProps = {
   token: string
-  onMessage: (data: any) => void
+  onMessage: (data: string) => void
 }
 
 const useWebSocket = ({ token, onMessage }: UseWebSocketProps) => {
   const stompClient = useRef<Client | null>(null)
 
   useEffect(() => {
-    const socket = new SockJS('http://localhost:8080/ws') // ⚠️ HTTP, pois SockJS precisa
+    const socket = new SockJS('http://localhost:8080/ws')
     const client = new Client({
       webSocketFactory: () => socket,
       connectHeaders: {
@@ -24,7 +24,7 @@ const useWebSocket = ({ token, onMessage }: UseWebSocketProps) => {
 
         client.subscribe('/topic/new-order', (message: IMessage) => {
           try {
-            const payload = JSON.parse(message.body)
+            const payload = message.body
             onMessage(payload)
           } catch (error) {
             console.error('Erro ao processar mensagem:', error)
@@ -40,9 +40,10 @@ const useWebSocket = ({ token, onMessage }: UseWebSocketProps) => {
     stompClient.current = client
 
     return () => {
-      stompClient.current?.deactivate()
+      console.log('[WebSocket] Desconectando...')
+      client.deactivate()
     }
-  }, [token, onMessage])
+  }, [token])
 }
 
 export default useWebSocket
