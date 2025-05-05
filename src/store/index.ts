@@ -3,6 +3,7 @@ import orderPanelReducer from './reducers/orderPanel'
 import productPanelReducer from './reducers/productPanel'
 import pesquisaProdutoReducer from './reducers/pesquisaProduto'
 import imagePanelReducer from './reducers/imagePanel'
+import recordsPanelReducer from './reducers/recordsPanel'
 import api from '../services/api'
 
 export const store = configureStore({
@@ -11,14 +12,13 @@ export const store = configureStore({
     productPanel: productPanelReducer,
     pesquisaProduto: pesquisaProdutoReducer,
     imagePanel: imagePanelReducer,
+    recordsPanel: recordsPanelReducer,
     [api.reducerPath]: api.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        // Ignore these action types
         ignoredActions: ['your/action/type'],
-        // Ignore these field paths in all actions
         ignoredActionPaths: [
           'meta.arg',
           'payload.timestamp',
@@ -26,7 +26,6 @@ export const store = configureStore({
           'payload.file',
           'meta.baseQueryMeta.response'
         ],
-        // Ignore these paths in the state
         ignoredPaths: ['imagePanel']
       }
     }).concat(api.middleware)

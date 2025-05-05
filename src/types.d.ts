@@ -91,3 +91,15 @@ declare type Order = {
   entregaPrice: number
   totalPrice: number
 }
+
+declare type FilterOrderRequest = {
+  customerName?: string
+  status?:
+    | 'AGUARDANDO_APROVACAO'
+    | 'PRODUCAO'
+    | 'PRONTO'
+    | 'FINALIZADO'
+    | 'CANCELADO'
+  initialDate?: string
+  finalDate?: string
+}

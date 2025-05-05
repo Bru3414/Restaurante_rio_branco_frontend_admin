@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import {
+  FilterOrderRequest,
   ImageProduct,
   ImageProductDB,
   Order,
@@ -20,11 +21,11 @@ const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:8080',
     prepareHeaders: (headers) => {
-      // Esta assim apenas para desenvolvimento
-      // Quando eu trabalhar na parte de adiministradores, isso sera ajustado
+      /* Esta assim apenas para desenvolvimento
+      Quando eu trabalhar na parte de adiministradores, isso sera ajustado */
       headers.set(
         'Authorization',
-        `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnVubzM0MTQuZGFtYnJvc2tpQGdtYWlsLmNvbSIsImlhdCI6MTc0NDQ4NDA0OSwiZXhwIjoxNzQ1MDg4ODQ5fQ.578onyxPfo9vkjFHshhEJRfSPDU9I8p3WZLfRraPHzcuaTzlXAh2au1Ly2Bi7lbH2jmR2D8mq-jmh9AxkBbLsw`
+        `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnVubzM0MTQuZGFtYnJvc2tpQGdtYWlsLmNvbSIsImlhdCI6MTc0NjM2OTU3OCwiZXhwIjoxNzQ2OTc0Mzc4fQ.-rLgQZfxKY3e3QpQRsA5HrmWxkK16Ai8NrDuwBk60VFuMqzHqF1AIkubs2Mv0I_eUthfR8O5-TmjTMmdtKG9SQ`
       )
 
       return headers
@@ -86,6 +87,13 @@ const api = createApi({
     getOrdersForOrdersPanelApi: builder.query<Order[], void>({
       query: () => '/order/get-orders-for-orders-panel'
     }),
+    getOrdersByFilter: builder.mutation<Order[], FilterOrderRequest>({
+      query: (body) => ({
+        url: '/order/get-orders-filter',
+        method: 'POST',
+        body
+      })
+    }),
     handleOrderStatus: builder.mutation<void, Order>({
       query: (body) => ({
         url: '/order/handle-order-status',
@@ -105,6 +113,7 @@ export const {
   useGetAllImagesProductsQuery,
   useDeleteImageProductMutation,
   useGetOrdersForOrdersPanelApiQuery,
+  useGetOrdersByFilterMutation,
   useHandleOrderStatusMutation
 } = api
 export default api
