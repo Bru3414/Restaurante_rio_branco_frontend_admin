@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Provider, useDispatch, useSelector } from 'react-redux'
-import OrderPanel from './components/OrderPanel'
+import OrderPanel from './components/Panels/OrderPanel'
 import GlobalCss, { Container } from './styles'
 import { RootReducer, store } from './store'
 import BarraLateral from './components/SideBar'
@@ -9,7 +9,7 @@ import Rotas from './routes'
 import useWebSocket from './services/webSocket'
 import { useGetOrdersForOrdersPanelApiQuery } from './services/api'
 import { atualizaOrders } from './store/reducers/orderPanel'
-import NotificationManager from './components/NotificationManager'
+import NotificationManager from './components/ReuseComponents/NotificationManager'
 
 function App() {
   const {
@@ -23,7 +23,7 @@ function App() {
   // Esta assim apenas para desenvolvimento
   // Quando eu trabalhar na parte de adiministradores, isso sera ajustado
   const token =
-    'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnVubzM0MTQuZGFtYnJvc2tpQGdtYWlsLmNvbSIsImlhdCI6MTc0NjM2OTU3OCwiZXhwIjoxNzQ2OTc0Mzc4fQ.-rLgQZfxKY3e3QpQRsA5HrmWxkK16Ai8NrDuwBk60VFuMqzHqF1AIkubs2Mv0I_eUthfR8O5-TmjTMmdtKG9SQ'
+    'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnVubzM0MTQuZGFtYnJvc2tpQGdtYWlsLmNvbSIsImlhdCI6MTc0Njk3NDg3NywiZXhwIjoxNzQ3NTc5Njc3fQ.sV_2VgcW-CUVbMM4qZjXOyRvOMdAQgngfG0loPHtSyhKvYv41ET2XOTxkfWHMAFOmxFzEXLsJUSuwZAG-l5X0g'
   const [playSound, setPlaySound] = useState(false)
 
   useEffect(() => {

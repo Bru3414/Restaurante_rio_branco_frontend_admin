@@ -5,5 +5,6 @@ export const Pesquisar = styled.div`
     font-size: 24px;
     padding: 8px;
     outline: none;
+    border-radius: 8px;
   }
 `

@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { colors } from '../../../styles'
 
 type Props = {
   colorButton:
@@ -15,6 +16,8 @@ export const CardContainer = styled.div`
   flex-direction: column;
   padding: 8px;
   border: 1px solid #000;
+  border-radius: 8px;
+  background-color: ${colors.white};
 `
 
 export const DivContent = styled.div`
@@ -60,6 +63,7 @@ export const Button = styled.button<Props>`
   margin: 8px 0;
   cursor: pointer;
   font-size: 24px;
+  border-radius: 8px;
   background-color: ${(props) => {
     switch (props.colorButton) {
       case 'AGUARDANDO_APROVACAO':

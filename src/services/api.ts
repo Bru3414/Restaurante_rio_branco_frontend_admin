@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import {
   FilterOrderRequest,
+  FilterOrderResponse,
   ImageProduct,
   ImageProductDB,
   Order,
@@ -25,7 +26,7 @@ const api = createApi({
       Quando eu trabalhar na parte de adiministradores, isso sera ajustado */
       headers.set(
         'Authorization',
-        `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnVubzM0MTQuZGFtYnJvc2tpQGdtYWlsLmNvbSIsImlhdCI6MTc0NjM2OTU3OCwiZXhwIjoxNzQ2OTc0Mzc4fQ.-rLgQZfxKY3e3QpQRsA5HrmWxkK16Ai8NrDuwBk60VFuMqzHqF1AIkubs2Mv0I_eUthfR8O5-TmjTMmdtKG9SQ`
+        `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJicnVubzM0MTQuZGFtYnJvc2tpQGdtYWlsLmNvbSIsImlhdCI6MTc0Njk3NDg3NywiZXhwIjoxNzQ3NTc5Njc3fQ.sV_2VgcW-CUVbMM4qZjXOyRvOMdAQgngfG0loPHtSyhKvYv41ET2XOTxkfWHMAFOmxFzEXLsJUSuwZAG-l5X0g`
       )
 
       return headers
@@ -87,7 +88,10 @@ const api = createApi({
     getOrdersForOrdersPanelApi: builder.query<Order[], void>({
       query: () => '/order/get-orders-for-orders-panel'
     }),
-    getOrdersByFilter: builder.mutation<Order[], FilterOrderRequest>({
+    getOrdersByFilter: builder.mutation<
+      FilterOrderResponse,
+      FilterOrderRequest
+    >({
       query: (body) => ({
         url: '/order/get-orders-filter',
         method: 'POST',

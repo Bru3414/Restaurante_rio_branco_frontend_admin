@@ -1,4 +1,4 @@
-import Button from '../Button'
+import Button from '../../ReuseComponents/Button'
 import ModalContainer from '../ModalContainer'
 
 import * as S from './styles'

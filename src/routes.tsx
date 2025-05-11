@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router-dom'
-import OrderPanel from './components/OrderPanel'
-import ProductPanel from './components/ProductPanel'
+import OrderPanel from './components/Panels/OrderPanel'
+import ProductPanel from './components/Panels/ProductPanel'
 import { Order } from './types'
-import RecordsPanel from './components/RecordsPanel'
+import RecordsPanel from './components/Panels/RecordsPanel'
 
 const Rotas = () => (
   <Routes>

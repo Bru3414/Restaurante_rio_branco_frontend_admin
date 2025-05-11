@@ -1,12 +1,12 @@
 import * as S from './styles'
-import lupa from '../../assets/images/lupa.png'
-import more from '../../assets/images/more.png'
-import { Order } from '../../types'
-import { useHandleOrderStatusMutation } from '../../services/api'
-import Countdown from '../Countdown'
+import lupa from '../../../assets/images/lupa.png'
+import more from '../../../assets/images/more.png'
+import { Order } from '../../../types'
+import { useHandleOrderStatusMutation } from '../../../services/api'
 import { useState } from 'react'
-import OrderDetails from '../OrderDetails'
-import { parseToBrl } from '../../utils'
+import OrderDetails from '../../Modals/OrderDetails'
+import { parseToBrl } from '../../../utils'
+import Countdown from '../../ReuseComponents/Countdown'
 
 type Props = {
   order: Order

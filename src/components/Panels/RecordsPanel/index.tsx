@@ -1,14 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { RootReducer } from '../../store'
-import { useGetOrdersByFilterMutation } from '../../services/api'
+import { RootReducer } from '../../../store'
+import { useGetOrdersByFilterMutation } from '../../../services/api'
 import { useEffect } from 'react'
 import {
+  atualizaCurrentPage,
   atualizaFilter,
   atualizaRecords
-} from '../../store/reducers/recordsPanel'
+} from '../../../store/reducers/recordsPanel'
 
 import * as S from './styles'
-import { formatDateToBR, parseToBrl } from '../../utils'
+import { formatDateToBR, parseToBrl } from '../../../utils'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useState } from 'react'
@@ -16,11 +17,14 @@ import DatePicker, { registerLocale } from 'react-datepicker'
 import './datepicker.css'
 import { ptBR } from 'date-fns/locale/pt-BR'
 import { format } from 'date-fns'
+import Navigation from '../../ReuseComponents/Navigation'
+import Loader from '../../ReuseComponents/Loader'
 
 registerLocale('pt-BR', ptBR)
 
 const RecordsPanel = () => {
-  const [startDate, setStartDate] = useState<Date | null>(new Date())
+  const [pageAtual, setPageAtual] = useState<number>(1)
+  const [startDate, setStartDate] = useState<Date | null>()
   const [finalDate, setFinalDate] = useState<Date | null>()
   const { items, filter } = useSelector(
     (state: RootReducer) => state.recordsPanel
@@ -32,6 +36,7 @@ const RecordsPanel = () => {
   useEffect(() => {
     if (isSuccess && data) {
       dispatch(atualizaRecords(data))
+      setPageAtual(data.currentPage)
     }
   }, [isSuccess])
 
@@ -57,18 +62,19 @@ const RecordsPanel = () => {
           | 'FINALIZADO'
           | 'CANCELADO'
       }
-      if (startDate !== null) {
+      if (startDate != null) {
         initialDate = format(startDate, 'yyyy-MM-dd')
       }
-      if (finalDate !== null) {
-        finalData = format(finalDate!, 'yyyy-MM-dd')
+      if (finalDate != null) {
+        finalData = format(finalDate, 'yyyy-MM-dd')
       }
       dispatch(
         atualizaFilter({
           customerName: values.customerName,
           initialDate: initialDate,
           finalDate: finalData,
-          status: status
+          status: status,
+          nPage: 1
         })
       )
     }
@@ -132,9 +138,13 @@ const RecordsPanel = () => {
     )
   }
 
+  const buscaPage = (page: number) => {
+    dispatch(atualizaCurrentPage(page))
+  }
+
   return (
     <div className="container">
-      <div onClick={() => getOrdersByFilterAPI(filter)}>Registros</div>
+      <div>Registros</div>
       {filtro()}
       <S.Tabela>
         <thead>
@@ -149,8 +159,8 @@ const RecordsPanel = () => {
           </tr>
         </thead>
         <tbody>
-          {[...items]
-            .sort((a, b) => b.id - a.id)
+          {[...items.orders]
+            .sort((a, b) => b.id + a.id)
             .map((item) => (
               <S.Row key={item.id} backColor={item.status}>
                 <td>#{item.id}</td>
@@ -168,6 +178,20 @@ const RecordsPanel = () => {
             ))}
         </tbody>
       </S.Tabela>
+      <Navigation
+        totalPage={items.totalPages}
+        currentPage={pageAtual}
+        onClick={(e) => {
+          buscaPage(e)
+        }}
+        prevPage={() => {
+          buscaPage(pageAtual - 1)
+        }}
+        nextPage={() => {
+          buscaPage(pageAtual + 1)
+        }}
+      />
+      <Loader isVisible={isLoading} />
     </div>
   )
 }

@@ -1,12 +1,12 @@
 import * as S from './styles'
-import CardOrder from '../CardOrder'
+import CardOrder from '../../Cards/CardOrder'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootReducer } from '../../store'
-import { atualizaOrders } from '../../store/reducers/orderPanel'
+import { RootReducer } from '../../../store'
+import { atualizaOrders } from '../../../store/reducers/orderPanel'
 import { useEffect, useState } from 'react'
-import useWebSocket from '../../services/webSocket'
-import { useGetOrdersForOrdersPanelApiQuery } from '../../services/api'
-import { Order } from '../../types'
+import useWebSocket from '../../../services/webSocket'
+import { useGetOrdersForOrdersPanelApiQuery } from '../../../services/api'
+import { Order } from '../../../types'
 
 const OrderPanel = () => {
   const { items } = useSelector((state: RootReducer) => state.orderPanel)

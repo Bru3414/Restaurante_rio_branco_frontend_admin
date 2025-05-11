@@ -102,4 +102,11 @@ declare type FilterOrderRequest = {
     | 'CANCELADO'
   initialDate?: string
   finalDate?: string
+  nPage: number
+}
+
+declare type FilterOrderResponse = {
+  orders: Order[]
+  totalPages: number
+  currentPage: number
 }

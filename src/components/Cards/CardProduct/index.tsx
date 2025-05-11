@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
-import { parseToBrl } from '../../utils'
+import { parseToBrl } from '../../../utils'
 import * as S from './styles'
-import { Product } from '../../types'
+import { Product } from '../../../types'
 import {
   useDeleteProductMutation,
   useUpdateProductMutation
-} from '../../services/api'
+} from '../../../services/api'
 import { useDispatch } from 'react-redux'
-import { excluir, update } from '../../store/reducers/productPanel'
-import ModalConfirmacao from '../ModalConfirmacao'
-import Button from '../Button'
+import { excluir, update } from '../../../store/reducers/productPanel'
+import ModalConfirmacao from '../../Modals/ModalConfirmacao'
+import Button from '../../ReuseComponents/Button'
 
 export interface Props extends Product {
   onClick: () => void

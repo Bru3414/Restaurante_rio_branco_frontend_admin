@@ -1,27 +1,27 @@
-import CardProduct from '../CardProduct'
+import CardProduct from '../../Cards/CardProduct'
 import * as S from './styles'
 import { useEffect, useState } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootReducer } from '../../store'
+import { RootReducer } from '../../../store'
 import {
   buscarProdutos,
   create,
   update
-} from '../../store/reducers/productPanel'
-import { ImageProductDB, Product } from '../../types'
-import { Category } from '../../utils/enums/Product'
-import PesquisaProdutos from '../PesquisaProdutos'
+} from '../../../store/reducers/productPanel'
+import { ImageProductDB, Product } from '../../../types'
+import { Category } from '../../../utils/enums/Product'
+import PesquisaProdutos from '../../ReuseComponents/PesquisaProdutos'
 import {
   useCreateProductMutation,
   useGetAllProdutosQuery,
   useUpdateProductMutation
-} from '../../services/api'
-import ModalContainer from '../ModalContainer'
-import ImagesProducts from '../ImagesProducts'
-import { handleImageSelected } from '../../store/reducers/imagePanel'
-import Button from '../Button'
+} from '../../../services/api'
+import ModalContainer from '../../Modals/ModalContainer'
+import ImagesProducts from '../../ReuseComponents/ImagesProducts'
+import { handleImageSelected } from '../../../store/reducers/imagePanel'
+import Button from '../../ReuseComponents/Button'
 
 interface ModalState extends Product {
   isVisible: boolean

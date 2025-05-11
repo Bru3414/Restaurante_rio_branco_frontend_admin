@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { colors } from '../../../styles'
 
 export const Div = styled.div`
   padding: 24px;
@@ -8,6 +9,8 @@ export const Div = styled.div`
   flex-direction: column;
   gap: 36px;
   max-height: 80vh;
+  border-radius: 8px;
+  background-color: ${colors.black};
 `
 
 export const Form = styled.form`
@@ -25,6 +28,7 @@ export const TopBarDiv = styled.div`
     padding: 8px;
     font-size: 20px;
     cursor: pointer;
+    border-radius: 8px;
   }
 `
 
@@ -93,6 +97,7 @@ export const ButtonImage = styled.button`
   border: 1px solid #000;
   outline: none;
   cursor: pointer;
+  border-radius: 8px;
 
   &:hover {
     background-color: gray;

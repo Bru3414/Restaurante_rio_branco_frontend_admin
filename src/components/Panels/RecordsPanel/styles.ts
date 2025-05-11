@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { colors } from '../../../styles'
 
 type Props = {
   backColor:
@@ -32,8 +33,8 @@ export const Tabela = styled.table`
   margin: 20px auto;
 
   thead {
-    background-color: #4caf50;
-    color: white;
+    background-color: ${colors.black};
+    color: ${colors.white};
   }
 
   th,
@@ -52,7 +53,7 @@ export const IntupsContainer = styled.form`
   flex-wrap: wrap;
   gap: 10px;
   padding: 10px;
-  background-color: #f9f9f9;
+  background-color: ${colors.black};
   align-items: center;
   border-radius: 8px;
 

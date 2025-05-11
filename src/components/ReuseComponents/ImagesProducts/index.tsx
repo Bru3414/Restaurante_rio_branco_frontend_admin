@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import ModalContainer from '../ModalContainer'
-import { RootReducer } from '../../store'
+import ModalContainer from '../../Modals/ModalContainer'
+import { RootReducer } from '../../../store'
 import {
   buscarImagensProdutos,
   handleImage,
@@ -10,23 +10,23 @@ import {
   deleteImage as deleteImageStore,
   handleImageSelected,
   updateImage
-} from '../../store/reducers/imagePanel'
+} from '../../../store/reducers/imagePanel'
 import {
   useDeleteImageProductMutation,
   useGetAllImagesProductsQuery,
   useGetAllProdutosQuery,
   useUploadImageProdutoMutation
-} from '../../services/api'
+} from '../../../services/api'
 import * as S from './styles'
 import { useEffect, useState } from 'react'
-import { ImageProductDB } from '../../types'
-import ModalConfirmacao from '../ModalConfirmacao'
+import { ImageProductDB } from '../../../types'
+import ModalConfirmacao from '../../Modals/ModalConfirmacao'
 import {
   alteraImageDefaultProduto,
   buscarProdutos
-} from '../../store/reducers/productPanel'
+} from '../../../store/reducers/productPanel'
 import Button from '../Button'
-import lixeira from '../../assets/images/lixeira.png'
+import lixeira from '../../../assets/images/lixeira.png'
 
 interface ModalState extends ImageProductDB {
   isVisible: boolean

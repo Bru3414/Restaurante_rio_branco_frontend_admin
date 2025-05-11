@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { colors } from '../../../styles'
 
 type Props = {
   isinmenu: boolean
@@ -8,8 +9,10 @@ export const CardContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  border: 1px solid #000;
+  border: 1px solid ${colors.white};
   padding: 8px;
+  border-radius: 8px;
+  background-color: ${colors.white};
 
   h2 {
     text-transform: uppercase;
